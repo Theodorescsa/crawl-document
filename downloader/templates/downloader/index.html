@@ -1,0 +1,20 @@
+{% extends 'downloader/base.html' %}
+
+{% block content %}
+<div class="glass-panel text-center">
+    <h1>Tải Tài Liệu DLIB</h1>
+    <p class="subtitle">Hệ thống xử lý đa luồng tốc độ cao. Chỉ 5,000đ/tài liệu.</p>
+    
+    <form action="{% url 'create_request' %}" method="POST">
+        {% csrf_token %}
+        <input 
+            type="url" 
+            name="url" 
+            class="text-input" 
+            placeholder="Dán link dlib.hvtc.edu.vn vào đây..." 
+            required
+        >
+        <button type="submit" class="btn">Bắt Đầu Tải Ngay Bất Kỳ Lúc Nào</button>
+    </form>
+</div>
+{% endblock %}

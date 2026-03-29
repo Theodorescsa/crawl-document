@@ -1,0 +1,49 @@
+{% extends 'downloader/base.html' %}
+
+{% block content %}
+<div class="glass-panel flex-col-center text-center">
+    
+    <div id="payment-section" style="width:100%">
+        <h1>Thanh toán 5.000đ</h1>
+        <p class="subtitle">Quét mã QR bằng ứng dụng ngân hàng của bạn</p>
+        
+        <div style="background: white; padding: 16px; border-radius: 16px; display: inline-block; margin-bottom: 24px;">
+            <img src="{{ qr_url }}" alt="QR Code" style="width: 250px; height: auto;" />
+        </div>
+        
+        <div style="text-align: left; margin-top: 10px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px;">
+            <p><strong>Ngân hàng:</strong> MBBank</p>
+            <p><strong>Số tài khoản:</strong> 0354235270</p>
+            <p><strong>Nội dung:</strong> <span style="color:var(--primary);font-weight:bold;font-size:18px;">{{ request.order_code }}</span></p>
+        </div>
+        <p style="margin-top:20px; color:#cbd5e1; font-size:14px;">Chuyển đúng "Nội dung" ở trên, hệ thống sẽ tự động quét và tải file.</p>
+    </div>
+
+    <!-- Hidden Loading Section -->
+    <div id="processing-section" style="display: none; width:100%">
+        <h1>Đang Tiến Hành Tải</h1>
+        <p class="subtitle">Robot tự động đang kéo dữ liệu với đa luồng...</p>
+        <div class="loader"></div>
+        <p style="color:#94a3b8; font-size:14px;">Vui lòng không đóng trang này. Thường mất 1-3 phút tuỳ dung lượng file nhé.</p>
+    </div>
+</div>
+
+<script>
+    const statusUrl = "{% url 'check_status' request.pk %}";
+    const downloadUrl = "{% url 'download_page' request.pk %}";
+
+    setInterval(() => {
+        fetch(statusUrl)
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'PROCESSING') {
+                    document.getElementById('payment-section').style.display = 'none';
+                    document.getElementById('processing-section').style.display = 'block';
+                } else if (data.status === 'COMPLETED') {
+                    window.location.href = downloadUrl;
+                }
+            })
+            .catch(err => console.error(err));
+    }, 3000);
+</script>
+{% endblock %}

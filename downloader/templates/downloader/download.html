@@ -1,0 +1,20 @@
+{% extends 'downloader/base.html' %}
+
+{% block content %}
+<div class="glass-panel text-center">
+    <h1>Tải Về Thành Công!</h1>
+    <span class="status-badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399;">Giao dịch & Xử lý hoàn tất</span>
+    
+    <p class="subtitle" style="margin-top:10px;">Cảm ơn bạn đã tin dùng dịch vụ. Nhấn vào nút bên dưới để tải file PDF về máy.</p>
+    
+    {% if request.pdf_file %}
+        <a href="{{ request.pdf_file.url }}" class="btn" download target="_blank">Lưu Tài Liệu (PDF)</a>
+    {% else %}
+        <p style="color:#ef4444;">Đã xảy ra lỗi, không tìm thấy tệp tài liệu.</p>
+    {% endif %}
+
+    <div style="margin-top: 30px;">
+        <a href="{% url 'index' %}" style="color:var(--text-muted); text-decoration:none; font-size:14px; border-bottom:1px dashed var(--text-muted);">Tải tài liệu khác</a>
+    </div>
+</div>
+{% endblock %}
